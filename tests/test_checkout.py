@@ -1,0 +1,55 @@
+from pages.checkout_step_two_page import CheckoutStepTwoPage
+
+def test_checkout_btn(loaded_cart):
+
+    cart_page = loaded_cart
+    checkout = cart_page.click_checkout_btn()
+
+    assert "/checkout-step-one" in checkout.driver.current_url
+
+def test_valid_checkout_info(loaded_cart):
+
+    cart_page = loaded_cart
+    checkout = cart_page.click_checkout_btn()
+    checkout.enter_info("john", "doe", "12345")
+
+    assert "/checkout-step-two" in checkout.driver.current_url
+
+def test_checkout_without_firstname(loaded_cart):
+
+    cart_page = loaded_cart
+    checkout = cart_page.click_checkout_btn()
+    checkout.enter_info("", "doe", "12345")
+
+    assert "required" in checkout.get_error_messages()
+
+def test_checkout_without_lastname(loaded_cart):
+
+    cart_page = loaded_cart
+    checkout = cart_page.click_checkout_btn()
+    checkout.enter_info("john", "", "12345")
+
+    assert "required" in checkout.get_error_messages()
+
+def test_checkout_without_postal_code(loaded_cart):
+
+    cart_page = loaded_cart
+    checkout = cart_page.click_checkout_btn()
+    checkout.enter_info("john", "doe", "")
+
+    assert "required" in checkout.get_error_messages()
+
+def test_checkout_step_two_finish_btn(loaded_cart):
+    cart_page = loaded_cart
+    checkout_one = cart_page.click_checkout_btn()
+    checkout_one.enter_info("john", "doe", "12345")
+
+    checkout_two = CheckoutStepTwoPage(checkout_one.driver)
+    checkout_two.click_finish_btn()
+
+    assert "/checkout-complete" in checkout_two.driver.current_url
+
+
+
+
+
