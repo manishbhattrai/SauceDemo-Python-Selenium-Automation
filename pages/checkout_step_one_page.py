@@ -1,6 +1,7 @@
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 
+from pages.checkout_step_two_page import CheckoutStepTwoPage
 
 
 class CheckoutStepOnePage(BasePage):
@@ -18,7 +19,9 @@ class CheckoutStepOnePage(BasePage):
 
     def wait_for_page(self):
         self.element_to_be_visible(self.first_name)
-        self.elements_to_be_visible(self.continue_btn)
+        self.element_to_be_visible(self.last_name)
+        self.element_to_be_visible(self.postal_code)
+        self.element_to_be_clickable(self.continue_btn)
 
 
     def get_first_name(self):
@@ -42,6 +45,16 @@ class CheckoutStepOnePage(BasePage):
     def click_continue(self):
         self.element_to_be_clickable(self.continue_btn).click()
 
+        if self.is_error_displayed():
+            return self
+
+        return CheckoutStepTwoPage(self.driver)
+
+    def is_error_displayed(self):
+        return len(
+            self.driver.find_elements(*self.error_message)
+        ) > 0
+
     def get_error_messages(self):
         return self.element_to_be_visible(self.error_message).text
 
@@ -49,4 +62,5 @@ class CheckoutStepOnePage(BasePage):
         self.enter_first_name(first_name)
         self.enter_last_name(last_name)
         self.enter_postal_code(postal_code)
-        self.click_continue()
+
+        return self.click_continue()

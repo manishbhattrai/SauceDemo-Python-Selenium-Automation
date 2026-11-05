@@ -2,6 +2,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 
 from pages.base_page import BasePage
+from pages.cart_page import CartPage
+
 
 class InventoryPage(BasePage):
 
@@ -25,6 +27,7 @@ class InventoryPage(BasePage):
 
     def go_to_cart(self):
         self.element_to_be_clickable(self.cart_icon).click()
+        return CartPage(self.driver)
 
     def dropdown_for_ascending_alphabet(self):
         dropdown_element = self.element_to_be_clickable(self.dropdown_btn)

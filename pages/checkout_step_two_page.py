@@ -14,7 +14,7 @@ class CheckoutStepTwoPage(BasePage):
         self.wait_for_page()
 
     def wait_for_page(self):
-        self.element_to_be_visible(self.overview_txt)
+        self.element_to_be_visible(self.finish_btn)
 
     def get_prices(self):
         return self.elements_to_be_visible(self.prices).text

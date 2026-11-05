@@ -38,17 +38,13 @@ def login_page(driver):
 @pytest.fixture()
 def logged_in_page(login_page):
     login_page.login("standard_user","secret_sauce")
-    return login_page
+    inventory_page = InventoryPage(login_page.driver)
+    return inventory_page
 
 @pytest.fixture()
 def loaded_cart(logged_in_page):
-    driver = logged_in_page.driver
-    inventory = InventoryPage(driver)
-    inventory.add_item()
-    inventory.go_to_cart()
-
-    cart = CartPage(driver)
-
-    return cart
+    logged_in_page.add_item()
+    cart_page = logged_in_page.go_to_cart()
+    return cart_page
 
 
